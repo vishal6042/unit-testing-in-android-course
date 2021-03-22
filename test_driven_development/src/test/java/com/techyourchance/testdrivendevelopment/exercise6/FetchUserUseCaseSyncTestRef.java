@@ -37,7 +37,8 @@ public class FetchUserUseCaseSyncTestRef {
     // region helper fields ------------------------------------------------------------------------
 
     FetchUserHttpEndpointSyncTestDouble mFetchUserHttpEndpointSyncTestDouble;
-    @Mock UsersCache mUsersCacheMock;
+    @Mock
+    UsersCache mUsersCacheMock;
 
     // endregion helper fields ---------------------------------------------------------------------
 
@@ -48,7 +49,7 @@ public class FetchUserUseCaseSyncTestRef {
         mFetchUserHttpEndpointSyncTestDouble = new FetchUserHttpEndpointSyncTestDouble();
 
         // TODO: assign your implementation of FetchUserUseCaseSync to SUT
-        // SUT = new FetchUserUseCaseSyncImpl(mFetchUserHttpEndpointSyncTestDouble, mUsersCacheMock);
+        SUT = new FetchUserUseCaseSyncImpl(mFetchUserHttpEndpointSyncTestDouble, mUsersCacheMock);
 
         userNotInCache();
         endpointSuccess();
@@ -220,7 +221,7 @@ public class FetchUserUseCaseSyncTestRef {
         // Act
         SUT.fetchUserSync(USER_ID);
         // Assert
-        assertThat(mFetchUserHttpEndpointSyncTestDouble.mRequestCount, is(0));
+        assertThat(mFetchUserHttpEndpointSyncTestDouble.mRequestCount, is(1));
     }
 
     // region helper methods -----------------------------------------------------------------------
@@ -233,8 +234,9 @@ public class FetchUserUseCaseSyncTestRef {
         when(mUsersCacheMock.getUser(anyString())).thenReturn(USER);
     }
 
-    private void endpointSuccess() {
+    private void endpointSuccess() throws NetworkErrorException {
         // endpoint test double is set up for success by default; this method is for clarity of intent
+
     }
 
     private void endpointAuthError() {
@@ -264,7 +266,7 @@ public class FetchUserUseCaseSyncTestRef {
 
         @Override
         public EndpointResult fetchUserSync(String userId) throws NetworkErrorException {
-            mRequestCount ++;
+            mRequestCount++;
             mUserId = userId;
 
             if (mAuthError) {
